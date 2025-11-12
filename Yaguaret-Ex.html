@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yaguaret-EX — Bebida Energética</title>
+  <meta name="description" content="YAGUARET-EX — Bebida energética gaseosa. Energía instantánea con sabor moderno y juvenil." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2300e6a8'/><text x='50' y='58' font-size='40' text-anchor='middle' fill='white' font-family='Arial'>Y</text></svg>">
+  <style>
+    /* Reset ligero */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html,body { height:100%; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; color:#0f1724; background:linear-gradient(180deg,#0b1020 0%, #071023 60%); }
+
+    /* Variables (fusionadas) */
+    :root{
+      --bg:#071023;
+      --card:#0f1724;
+      --accent1:#00e6a8;
+      --accent2:#6ee7ff;
+      --muted:#9aa8b2;
+      --glass: rgba(255,255,255,0.04);
+    }
+
+    .container { max-width:1100px; margin:0 auto; padding:28px; }
+
+    header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 0; }
+    .brand { display:flex;align-items:center;gap:12px;color:white;text-decoration:none; }
+    .logo {
+      width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#02111a;font-size:18px;box-shadow:0 6px 18px rgba(0,0,0,0.5);
+    }
+    nav { display:flex; gap:16px; align-items:center; }
+    nav a { color:var(--muted); text-decoration:none; font-weight:600; transition: color .12s ease; }
+    nav a.active { color: var(--accent1); }
+    nav a:hover { color: white; }
+    .btn {
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      color:#002026;
+      padding:10px 16px;
+      border-radius:12px;
+      font-weight:700;
+      border:none;
+      cursor:pointer;
+      box-shadow:0 6px 20px rgba(0,0,0,0.45);
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .btn:active{ transform:translateY(1px); }
+    .ghost { background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); padding:8px 12px; border-radius:10px; }
+
+    /* Hero */
+    .hero { display:grid; grid-template-columns: 1fr 420px; gap:28px; align-items:center; padding:48px 0 28px; }
+    @media (max-width:920px){ .hero { grid-template-columns: 1fr; text-align:center; } nav{display:none;} .hero-visual{margin:0 auto;} }
+
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 56px);
+      line-height:1.02;
+      color: white;
+      background: linear-gradient(90deg,#fff,#bfffe9);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -1px;
+      margin-bottom:12px;
+    }
+    .tag { color:var(--accent1); font-weight:800; display:inline-block; margin-bottom:16px; text-transform:uppercase; font-size:12px; letter-spacing:1px; background:rgba(0,230,168,0.08); padding:6px 10px; border-radius:999px; }
+
+    .hero p { color:var(--muted); font-size:16px; margin-bottom:20px; max-width:620px; }
+
+    .cta-row { display:flex; gap:12px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .price-bubble { font-weight:800; color:var(--accent2); background:rgba(110,231,255,0.06); padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,0.03); }
+
+    /* --- CARRUSEL / CAN --- */
+    .hero-visual {
+      width: 260px;
+      height: 420px;
+      perspective: 1200px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin: 0 auto;
+    }
+
+    .can {
+      width:100%; height:100%;
+      border-radius:22px;
+      background:linear-gradient(180deg,#02111a 0%, #05212a 100%);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      position:relative;
+      overflow:hidden;
+      transform-style:preserve-3d;
+      transition: transform .5s cubic-bezier(.2,.9,.2,1);
+      border:1px solid rgba(255,255,255,0.04);
+    }
+
+    .carousel-img {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      border-radius:22px;
+      opacity:0;
+      transition: opacity 600ms ease;
+      transform: translateZ(0); /* avoid blurry on transform */
+    }
+    .carousel-img.active { opacity:1; }
+
+    .can .label {
+      position:relative;
+      z-index:2;
+      display:block;
+      text-align:center;
+      font-size:30px;
+      font-weight:900;
+      color:white;
+      letter-spacing:2px;
+      margin-top:12px;
+      text-shadow:0 6px 30px rgba(0,0,0,0.7);
+    }
+    .can .subtitle {
+      position:relative;
+      z-index:2;
+      color:var(--muted);
+      text-align:center;
+      margin-top:6px;
+      font-weight:700;
+      letter-spacing:1px;
+      font-size:12px;
+      text-transform:uppercase;
+    }
+
+    .carousel-controls {
+      position:absolute;
+      bottom:12px;
+      left:50%;
+      transform:translateX(-50%);
+      display:flex;
+      gap:8px;
+      z-index:3;
+    }
+    .dot {
+      width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.35);cursor:pointer;transition:background .18s;
+    }
+    .dot.active { background:var(--accent1); }
+
+    /* Cards, flavors, footer (copiado de tu estilo) */
+    .cards { display:grid; grid-template-columns: repeat(3,1fr); gap:18px; margin:36px 0; }
+    @media (max-width:920px){ .cards{ grid-template-columns: 1fr; } }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px);
+      transition:transform .18s ease, box-shadow .18s ease;
+      color:white;
+    }
+    .card:hover { transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.45); }
+    .card h3{ color:white; margin-bottom:8px; }
+    .muted { color:var(--muted); font-size:14px; }
+
+    .flavors { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px; }
+    @media (max-width:720px){ .flavors{ grid-template-columns:1fr; } }
+    .flavor { display:flex;gap:14px;align-items:center;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03); background:linear-gradient(180deg, rgba(0,0,0,0.05), transparent); color:white; }
+    .swatch { width:72px;height:72px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#02111a; overflow:hidden; }
+    .swatch img { width:100%; height:100%; object-fit:cover; }
+
+    /* Footer / subscribe (copiado de la segunda página) */
+    footer { margin-top:42px;padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:12px; border:1px solid rgba(255,255,255,0.03); }
+    .subscribe { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .subscribe form { display:flex; gap:8px; align-items:center; }
+    .subscribe input[type="email"] {
+      padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04); background:transparent;color:white; min-width:240px;
+    }
+    .note { color:var(--muted); font-size:13px; margin-top:10px; }
+
+    /* small utilities */
+    .center { text-align:center; }
+    .chip { padding:6px 10px; border-radius:999px; font-weight:700; background:rgba(255,255,255,0.03); color:var(--muted); border:1px solid rgba(255,255,255,0.02); }
+
+    /* reveal animations */
+    .reveal { opacity:0; transform:translateY(8px); transition:opacity .6s ease, transform .6s cubic-bezier(.2,.9,.2,1); }
+    .reveal.show { opacity:1; transform:none; }
+
+    /* small credit */
+    .small { font-size:12px; color:var(--muted); }
+  </style>
+</head>
+<body>
+   <div class="container">
+    <header>
+      <a class="brand" href="#">
+        <div class="logo" aria-hidden="true"><img src="img/Logo yag.png" alt="" width="100" height="100"></div>
+        <div>
+          <div style="font-weight:800;color:white;">YAGUARET-EX</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Despierta tu instinto</div>
+        </div>
+      </a>
+      <nav aria-label="Navegación principal">
+        <a href="#" id="nav-inicio" class="active">Inicio</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#nosotros">Nosotros</a>
+        <button class="btn" id="cta-top">Probar</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <span class="tag">Bebida energética — nueva</span>
+          <h1 id="hero-title">Desatá tu energía. Rugí con<br> YAGUARET-EX.</h1>
+          <p class="reveal">YAGUARET-EX combina la efervescencia de una gaseosa con ingredientes pensados para darte foco y energía rápida. Sabor moderno y potente — para darlo todo.</p>
+
+          <div class="cta-row reveal" style="margin-top:8px;">
+            <button class="btn" id="buy-btn">Comprar ahora</button>
+            <button class="ghost" id="learn-btn">Ver sabores</button>
+            <div class="price-bubble">Lanzamiento: 2x $4000</div>
+          </div>
+
+          <div class="cards reveal" style="margin-top:28px;">
+            <div class="card" aria-hidden="true">
+              <h3>Efecto rápido</h3>
+              <p class="muted">Cafeína balanceada + vitaminas B para un impulso sin bajones.</p>
+            </div>
+            <div class="card" aria-hidden="true">
+              <h3>Sabor potente</h3>
+              <p class="muted">Recetas pensadas para destacar en cada sorbo.</p>
+            </div>
+            <div class="card" aria-hidden="true">
+              <h3>Diseño nacional</h3>
+              <p class="muted">Latas que representan actitud y calle.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARRUSEL integrado en la "can" -->
+        <div class="hero-visual">
+          <div class="can" id="can" role="img" aria-label="Lata Yaguaret-EX">
+            <img src="img/yaguarete rockstar.jpg" alt="rockstar" class="carousel-img active">
+            <img src="img/yaguaret classic.png" alt="classic" class="carousel-img">
+            <img src="img/yaguaret-plata.png" alt="plata" class="carousel-img">
+            <img src="img/yaguarete hallowen.jpg" alt="halloween" class="carousel-img">
+
+            <div class="carousel-controls" aria-hidden="false">
+              <span class="dot active" data-index="0" title="slide 1"></span>
+              <span class="dot" data-index="1" title="slide 2"></span>
+              <span class="dot" data-index="2" title="slide 3"></span>
+              <span class="dot" data-index="3" title="slide 4"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sabores" style="margin-top:18px;">
+        <h2 style="color:white;margin-bottom:8px;">Sabores</h2>
+        <p class="muted" style="margin-bottom:12px;">Cuatro lanzamientos iniciales — cada uno con personalidad propia.</p>
+
+        <div class="flavors">
+          <a href="Yaguaret-EX-Rockstar.html" class="flavor reveal" style="text-decoration:none;">
+            <div class="swatch"><img src="img/yaguarete rockstar.jpg" alt="rockstar"></div>
+            <div>
+              <strong style="color:white;">Yaguaret-EX Rockstar</strong>
+              <div class="muted">Multifruta salvaje con energía que vibra al ritmo del trap.</div>
+            </div>
+          </a>
+
+          <a href="Yaguaret-EX-Classic.html" class="flavor reveal" style="text-decoration:none;">
+            <div class="swatch"><img src="img/yaguaret classic inicio.jpg" alt="classic"></div>
+            <div>
+              <strong style="color:white;">Yaguaret-EX Classic</strong>
+              <div class="muted">Explosión lima limón, refrescante y salvaje para encender tu día.</div>
+            </div>
+          </a>
+
+          <a href="Yaguaret-EX-Plata.html" class="flavor reveal" style="text-decoration:none;">
+            <div class="swatch"><img src="img/yaguaret-plata inicio.jpg" alt="plata"></div>
+            <div>
+              <strong style="color:white;">Yaguaret-EX Plata</strong>
+              <div class="muted">Celeste y blanco, sabor a ananá y garra argentina. La bebida que ruge con vos.</div>
+            </div>
+          </a>
+
+          <a href="Yaguaret-EX-Halloween.html" class="flavor reveal" style="text-decoration:none;">
+            <div class="swatch"><img src="img/yaguarete hallow inicio.jpg" alt="halloween"></div>
+            <div>
+              <strong style="color:white;">Yaguaret-EX Halloween</strong>
+              <div class="muted">Naranja intensa con toque misterioso.</div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section id="beneficios" style="margin-top:28px;">
+        <h2 style="color:white;margin-bottom:8px;">Beneficios</h2>
+        <div class="cards" style="margin-top:12px;">
+          <div class="card reveal">
+            <h3>Foco mental</h3>
+            <p class="muted">Blend de cafeína y vitaminas B para concentración leve y sostenida.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Bajo contenido de azúcar</h3>
+            <p class="muted">Opciones con edulcorantes modernos para menos calorías sin perder sabor.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Para todo momento</h3>
+            <p class="muted">Perfecta para estudiar, entrenar o para la salida con amigos.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="nosotros" style="margin-top:28px;">
+        <h2 style="color:white;margin-bottom:8px;">Sobre YAGUARET-EX</h2>
+        <p class="muted">YAGUARET-EX nació como una idea para crear una bebida energética gaseosa con identidad urbana: latas que entren en la mochila, fórmulas pensadas para la vida cotidiana y sabores arriesgados. Este sitio es un prototipo — cambia el nombre cuando quieras y adapta textos e ingredientes a la fórmula real.</p>
+      </section>
+    </main>
+
+    <!-- FOOTER COPIADO EXACTO DE LA SEGUNDA PÁGINA (con id añadido para scroll) -->
+    <footer id="footer">
+      <div class="subscribe">
+        <div style="max-width:640px;">
+          <h3 style="color:white;">Suscribite y recibe una muestra</h3>
+          <p class="note">Recibí noticias, lanzamientos y descuentos exclusivos. No compartimos tu correo.</p>
+        </div>
+
+        <form id="subscribeForm" aria-label="Formulario de suscripción">
+          <input type="email" id="email" placeholder="tu@correo.com" aria-label="Correo electrónico" required>
+          <button class="btn" type="submit">Suscribirme</button>
+        </form>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;flex-wrap:wrap;">
+        <div class="small">© <strong>YAGUARET-EX</strong> — Diseño por Mauricio Vibanco - Gonzalo Sosa.</div>
+        <div style="display:flex;gap:10px;margin-top:8px;">
+          <a class="chip" href="#" onclick="alert('En desarrollo')">Términos</a>
+          <a class="chip" href="#" onclick="alert('En desarrollo')">Contacto</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // ---------- CARRUSEL ----------
+    const imgs = Array.from(document.querySelectorAll('.carousel-img'));
+    const dots = Array.from(document.querySelectorAll('.dot'));
+    let idx = 0;
+    let autoplay = true;
+    let autoplayInterval = 3000;
+    let autoplayTimer = null;
+
+    function show(idxWanted){
+      imgs.forEach((im,i)=> im.classList.toggle('active', i === idxWanted));
+      dots.forEach((d,i)=> d.classList.toggle('active', i === idxWanted));
+      idx = idxWanted;
+    }
+
+    function next(){
+      const nextIndex = (idx + 1) % imgs.length;
+      show(nextIndex);
+    }
+
+    // dot clicks
+    dots.forEach(d => {
+      d.addEventListener('click', (e) => {
+        const i = parseInt(d.dataset.index, 10);
+        show(i);
+        resetAutoplay();
+      });
+    });
+
+    function startAutoplay(){
+      if(autoplayTimer) clearInterval(autoplayTimer);
+      autoplayTimer = setInterval(next, autoplayInterval);
+    }
+    function resetAutoplay(){
+      if(autoplay) {
+        clearInterval(autoplayTimer);
+        startAutoplay();
+      }
+    }
+    startAutoplay();
+
+    // ---------- PARALLAX / HOVER (can) ----------
+    const can = document.getElementById('can');
+    if(can){
+      can.addEventListener('mousemove', e => {
+        const rect = can.getBoundingClientRect();
+        const x = e.clientX - rect.left; // x dentro del elemento
+        const y = e.clientY - rect.top;  // y dentro del elemento
+        const rX = (y - rect.height/2) / 15; // ajustar divisores para intensidad
+        const rY = (x - rect.width/2) / 15;
+        can.style.transform = `rotateY(${rY}deg) rotateX(${-rX}deg) translateY(-8px)`;
+      });
+      can.addEventListener('mouseleave', () => {
+        can.style.transform = '';
+      });
+    }
+
+    // ---------- REVEAL ON SCROLL ----------
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ---------- NAV "INICIO" ACTIVE ----------
+    const navInicio = document.getElementById('nav-inicio');
+    if(navInicio){
+      navInicio.addEventListener('click', (e) => {
+        e.preventDefault();
+        // aplica clase active a "Inicio" y la mantiene hasta que se haga click en otro nav
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        navInicio.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // si clickean otros nav, quitar active de inicio
+    document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+      a.addEventListener('click', () => {
+        document.querySelectorAll('nav a').forEach(n => n.classList.remove('active'));
+        a.classList.add('active');
+      });
+    });
+
+    // ---------- BOTON "PROBAR" (scroll al footer) ----------
+    const ctaTop = document.getElementById('cta-top');
+    if(ctaTop){
+      ctaTop.addEventListener('click', () => {
+        // intenta scrollear al footer (usamos id="footer" añadido arriba)
+        const f = document.getElementById('footer');
+        if(f) f.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    // ---------- BOTON "VER SABORES" ----------
+    const learnBtn = document.getElementById('learn-btn');
+    if(learnBtn) learnBtn.addEventListener('click', () => {
+      document.getElementById('sabores').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ---------- BUY BUTTON MESSAGE ----------
+    const buyBtn = document.getElementById('buy-btn');
+    if(buyBtn){
+      buyBtn.addEventListener('click', function(){
+        alert('🚀 Muy pronto podrás comprar YAGUARET-EX. ¡Lanzamiento en camino!');
+      });
+      // tambien con Enter
+      buyBtn.addEventListener('keyup', (e) => { if(e.key === 'Enter') alert('🚀 Muy pronto podrás comprar YAGUARET-EX. ¡Lanzamiento en camino!'); });
+    }
+
+    // ---------- SUBSCRIBE FORM SIMULADO ----------
+    function attachFormHandler(){
+      const f = document.getElementById('subscribeForm');
+      if(!f) return;
+      // avoid double attachment
+      if(f.__attached) return;
+      f.__attached = true;
+
+      f.addEventListener('submit', function(e){
+        e.preventDefault();
+        const emailInput = document.getElementById('email');
+        const email = emailInput ? emailInput.value.trim() : '';
+        if(!email || !/^\S+@\S+\.\S+$/.test(email)){
+          alert('Por favor ingresa un correo válido.');
+          return;
+        }
+        const old = f.innerHTML;
+        f.innerHTML = '<div style="color:var(--accent1);font-weight:800;padding:8px 12px;border-radius:10px;background:rgba(0,230,168,0.06);">¡Gracias! Te enviamos un código de descuento a ' + email + '</div>';
+        // Restaurar el formulario después de 6s
+        setTimeout(()=> { f.innerHTML = old; // reattach after restoring
+          attachFormHandler();
+        }, 6000);
+      });
+    }
+
+    // attach on load
+    attachFormHandler();
+
+    // limpiar timers on unload
+    window.addEventListener('beforeunload', ()=> { if(autoplayTimer) clearInterval(autoplayTimer); });
+  </script>
+</body>
+</html>

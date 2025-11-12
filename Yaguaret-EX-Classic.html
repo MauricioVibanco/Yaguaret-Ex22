@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yaguaret-EX Classic</title>
+  <meta name="description" content="Yaguaret-EX Classic — Sabor cítrico y vibrante." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2300e6a8'/><text x='50' y='58' font-size='40' text-anchor='middle' fill='white' font-family='Arial'>Y</text></svg>">
+  <style>
+    /* === ESTILOS IGUALES A LA PÁGINA PRINCIPAL === */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: #0f1724;
+      background: linear-gradient(180deg, #0b1020 0%, #071023 60%);
+    }
+    :root {
+      --bg: #071023;
+      --card: #0f1724;
+      --accent1: #00e6a8;
+      --accent2: #6ee7ff;
+      --muted: #9aa8b2;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 28px; }
+
+    header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 0; }
+    .brand { display:flex;align-items:center;gap:12px;color:white;text-decoration:none; }
+    .logo { width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#02111a;font-size:18px;box-shadow:0 6px 18px rgba(0,0,0,0.5);overflow:hidden; }
+    
+    nav { display:flex; gap:16px; align-items:center; }
+    nav a { color:var(--muted); text-decoration:none; font-weight:600; transition:color .2s ease; }
+    nav a:hover { color:var(--accent1); }
+    nav a.active { color:var(--accent1); }
+    .btn { background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:#002026; padding:10px 16px; border-radius:12px; font-weight:700; border:none; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,0.45); transition:transform .12s ease, box-shadow .12s ease; }
+    .btn:active{ transform:translateY(1px); }
+
+    .hero { display:grid; grid-template-columns: 1fr 420px; gap:28px; align-items:center; padding:48px 0 28px; }
+    @media (max-width:920px){ .hero { grid-template-columns:1fr; text-align:center; } nav{display:none;} .hero-visual{margin:0 auto;} }
+    .hero h1 { font-size: clamp(32px, 6vw, 56px); line-height:1.02; color: white; background: linear-gradient(90deg,#fff,#bfffe9); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -1px; margin-bottom:12px; }
+    .hero p { color:var(--muted); font-size:16px; margin-bottom:20px; max-width:620px; }
+
+    .hero-visual { perspective:1200px; display:flex; justify-content:center; align-items:center; }
+    .can { width:260px;height:420px;border-radius:22px;background:linear-gradient(180deg,#02111a 0%, #05212a 100%); box-shadow: 0 30px 80px rgba(0,0,0,0.6); display:flex;flex-direction:column;align-items:center;justify-content:center; transform-style:preserve-3d; transition:transform .5s cubic-bezier(.2,.9,.2,1); border:1px solid rgba(255,255,255,0.04); overflow:hidden; position:relative; }
+    .can img { width:100%; height:100%; object-fit:cover; border-radius:22px; position:absolute; inset:0; z-index:0; opacity:0.5; }
+    .can .label { font-size:36px; font-weight:900; color:white; letter-spacing:2px; text-shadow:0 6px 30px rgba(0,0,0,0.7); z-index:1; }
+    .can .subtitle { color:var(--muted); margin-top:8px; font-weight:700; letter-spacing:1px; font-size:12px; text-transform:uppercase; z-index:1; }
+    .can:hover { transform: rotateY(14deg) rotateX(6deg) translateY(-8px) scale(1.03); }
+
+    .cards { display:grid; grid-template-columns: repeat(3,1fr); gap:18px; margin:36px 0; }
+    @media (max-width:920px){ .cards{ grid-template-columns: 1fr; } }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03);backdrop-filter: blur(6px); transition:transform .18s ease, box-shadow .18s ease; }
+    .card:hover { transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.45); }
+    .card h3{ color:white; margin-bottom:8px; }
+    .muted { color:var(--muted); font-size:14px; }
+
+    footer { margin-top:42px;padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:12px; border:1px solid rgba(255,255,255,0.03); }
+    .subscribe { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .subscribe form { display:flex; gap:8px; align-items:center; }
+    .subscribe input[type="email"] { padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04); background:transparent;color:white; min-width:240px; }
+    .note { color:var(--muted); font-size:13px; margin-top:10px; }
+    .small { font-size:12px; color:var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <header>
+       <a class="brand" href="Yaguaret-Ex.html">
+        <div class="logo" aria-hidden="true"><img src="img/Logo yag.png" alt="" width=100px; height=100px></div>
+        <div>
+          <div style="font-weight:800;color:white;">YAGUARET-EX</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Despierta tu instinto</div>
+        </div>
+      </a>
+      <nav>
+        <a href="Yaguaret-Ex.html" class="active">Inicio</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#nosotros">Nosotros</a>
+        <button class="btn" id="probar-btn">Probar</button>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <h1 style="font-family:Monsterama ;">Yaguaret-EX Classic</h1> <br>
+        <p>YAGUARET-EX CLASSIC es una bebida energética con un estilo salvaje y sabor a lima limón. Potente y vibrante, 
+          está pensada para brindar energía al máximo, ideal para quienes buscan despertar su instinto
+           y encender el día con un toque enérgico y auténticamente salvaje.
+        </p> <br>
+        <p>INGREDIENTES <br>
+          500 ml de agua con gas<br>
+          50 ml de jugo de lima natural<br>
+          10-15 g de azucar <br>
+          30-50 mg de cafeina<br>
+          100 mg de taurina <br>
+          Un toque de limón... o una gota de sudor de yaguareté
+        </p>
+       <button class="btn" id="buy-btn">Comprar ahora</button>
+      </div>
+
+      <div class="hero-visual">
+        <div class="can" id="can" role="img" aria-label="Lata de PULSE">
+          <img src="img/yaguaret classic.png" alt="Lata de PULSE">
+          <div class="label"></div>
+          <div class="subtitle"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFICIOS -->
+    <section id="beneficios" style="margin-top:28px;">
+      <h2 style="color:white;margin-bottom:8px;">Beneficios</h2>
+      <div class="cards" style="margin-top:12px;">
+        <div class="card"><h3>Foco mental</h3><p class="muted">Cafeína y vitaminas B para concentración leve y sostenida.</p></div>
+        <div class="card"><h3>Bajo contenido de azúcar</h3><p class="muted">Edulcorantes modernos para menos calorías sin perder sabor.</p></div>
+        <div class="card"><h3>Para todo momento</h3><p class="muted">Ideal para estudiar, entrenar o salir con amigos.</p></div>
+      </div>
+    </section>
+
+    <!-- NOSOTROS -->
+    <section id="nosotros" style="margin-top:28px;">
+      <h2 style="color:white;margin-bottom:8px;">Sobre Yaguaret-EX</h2>
+      <p class="muted">YAGUARET-EX nació como una idea para crear una bebida energética gaseosa con identidad urbana: latas que entren en la mochila, fórmulas pensadas para la vida cotidiana y sabores arriesgados.</p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+      <div class="subscribe">
+        <div style="max-width:640px;">
+          <h3 style="color:white;">Suscribite y recibe una muestra</h3>
+          <p class="note">Recibí noticias, lanzamientos y descuentos exclusivos. No compartimos tu correo.</p>
+        </div>
+        <form id="subscribeForm">
+          <input type="email" id="email" placeholder="tu@correo.com" required>
+          <button class="btn" type="submit">Suscribirme</button>
+        </form>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;flex-wrap:wrap;">
+        <div class="small">© <strong>YAGUARET-EX</strong> — Diseño por Mauricio Vibanco - Gonzalo Sosa.</div>
+        <div style="display:flex;gap:10px;margin-top:8px;">
+          <a class="chip" href="#" onclick="alert('En desarrollo')">Términos</a>
+          <a class="chip" href="#" onclick="alert('En desarrollo')">Contacto</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Scroll suave hacia el footer al hacer clic en "Probar"
+    document.getElementById("probar-btn").addEventListener("click", () => {
+      document.getElementById("footer").scrollIntoView({ behavior: "smooth" });
+    });
+        document.getElementById('buy-btn').addEventListener('click', function(){ alert('🚀 Muy pronto podrás comprar YAGUARET-EX Classic. ¡Lanzamiento en camino!'); });
+
+    // === ANIMACIÓN DE LA LATA (MISMA QUE EN LA PRINCIPAL) ===
+    const can = document.getElementById('can');
+    can.addEventListener('mousemove', e => {
+      const rX = (e.offsetY - can.clientHeight / 2) / 15;
+      const rY = (e.offsetX - can.clientWidth / 2) / 15;
+      can.style.transform = `rotateY(${rY}deg) rotateX(${-rX}deg) translateY(-8px)`;
+    });
+    can.addEventListener('mouseleave', () => {
+      can.style.transform = '';
+    });
+        // Simple form handling (no envío real)
+    const form = document.getElementById('subscribeForm');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      if(!email || !/^\S+@\S+\.\S+$/.test(email)){
+        alert('Por favor ingresa un correo válido.');
+        return;
+      }
+      // Simula envío y muestra mensaje
+      const old = form.innerHTML;
+      form.innerHTML = '<div style="color:var(--accent1);font-weight:800;padding:8px 12px;border-radius:10px;background:rgba(0,230,168,0.06);">¡Gracias! Te enviamos un código de descuento a ' + email + '</div>';
+      // Restaurar el formulario después de 6s
+      setTimeout(()=> { form.innerHTML = old; form.reset(); attachFormHandler(); }, 6000);
+    });
+
+    // Because we replace innerHTML above, reattach handler
+    function attachFormHandler(){
+      const f = document.getElementById('subscribeForm');
+      if(f) f.addEventListener('submit', function(e){ e.preventDefault(); document.getElementById('subscribeForm').dispatchEvent(new Event('submit')); });
+    }
+
+  </script>
+</body>
+</html>
